@@ -4,30 +4,36 @@ set -e
 echo "⚡ EthStorage Trusted Setup Ceremony Installer"
 echo "📅 Ceremony: Aug 13 – 22, 2025"
 echo "Script by Crypto Console"
-sleep 5
+sleep 3
 
 # --- Update system ---
 echo "📦 Updating system packages..."
-sudo apt-get update && sudo apt-get upgrade -y
+sudo apt-get update -qq && sudo apt-get upgrade -y -qq
 
 # --- Install dependencies ---
 echo "📥 Installing dependencies..."
-sudo apt install -y curl screen iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli libgbm1 pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip ca-certificates
+sudo apt install -y -qq curl screen iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli libgbm1 pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip ca-certificates
 
-# --- Install NVM ---
-if ! command -v nvm &> /dev/null; then
+# --- Install or load NVM silently ---
+export NVM_DIR="$HOME/.nvm"
+if [ ! -d "$NVM_DIR" ]; then
     echo "🛠 Installing NVM..."
-    curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-    source ~/.bashrc
+    curl -s -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash >/dev/null 2>&1
 else
-    echo "✅ NVM already installed"
+    echo "🔄 Updating NVM..."
+    cd "$NVM_DIR" && git pull >/dev/null 2>&1 && cd -
 fi
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"
 
 # --- Install Node.js 18 ---
 echo "🛠 Installing Node.js 18..."
-source ~/.bashrc
-nvm install 18
-nvm use 18
+nvm install 18 >/dev/null 2>&1
+nvm use 18 >/dev/null 2>&1
+
+# --- Update npm to latest v10.x (compatible with Node 18) ---
+echo "📦 Updating npm to latest v10.x..."
+npm install -g npm@10 >/dev/null 2>&1
 
 # --- Setup ceremony directory ---
 CEREMONY_DIR=~/ceremonyeth
@@ -35,7 +41,7 @@ mkdir -p $CEREMONY_DIR && cd $CEREMONY_DIR
 
 # --- Install CLI ---
 echo "📦 Installing phase2cli..."
-npm install -g @p0tion/phase2cli
+npm install -g @p0tion/phase2cli >/dev/null 2>&1
 
 # --- Authenticate GitHub ---
 echo "🔐 Starting GitHub authentication..."
