@@ -74,6 +74,95 @@ chmod +x ethstorage-setup.sh
 
 ---
 
+## 🧭 Option 2 – Manual Setup (Step-by-Step)
+
+> Works on Ubuntu/Linux, macOS, or WSL. For VPS, prefer **Ubuntu 20.04/22.04+**.
+
+### 1) Update system & install packages
+
+```bash
+sudo apt-get update && sudo apt-get upgrade -y
+sudo apt install -y curl screen iptables build-essential git wget lz4 jq make gcc nano automake autoconf tmux htop nvme-cli libgbm1 pkg-config libssl-dev libleveldb-dev tar clang bsdmainutils ncdu unzip ca-certificates
+```
+
+### 2) Install NVM (Node Version Manager)
+
+```bash
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
+[ -s "$NVM_DIR/bash_completion" ] && . "$NVM_DIR/bash_completion"
+```
+
+### 3) Install Node.js 18
+
+```bash
+nvm install 18
+nvm use 18
+```
+
+> Keep npm on **v10.x** for Node 18 compatibility:
+
+```bash
+npm install -g npm@10
+```
+
+### 4) Create the working folder
+
+```bash
+mkdir -p ~/ceremonyeth && cd ~/ceremonyeth
+```
+
+### 5) Install the ceremony CLI
+
+```bash
+npm install -g @p0tion/phase2cli
+```
+
+### 6) Authenticate with GitHub
+
+```bash
+phase2cli auth
+```
+
+* Visit **[https://github.com/login/device](https://github.com/login/device)**
+* Enter the code from your terminal
+* Click **Authorize ethstorage**
+* Allow **Read & Write access to GitHub Gists** in permissions
+
+(optional) Verify authentication:
+
+```bash
+phase2cli whoami
+```
+
+### 7) Start a `screen` session
+
+```bash
+screen -S ceremony
+```
+
+### 8) Join the ceremony
+
+```bash
+phase2cli contribute -c ethstorage-v1-trusted-setup-ceremony
+```
+
+* Press **Enter** for random input, or type your own characters.
+
+---
+
+## 🧹 Cleanup & Logout
+
+When done, it’s recommended to clean up for security:
+
+```bash
+phase2cli clean
+phase2cli logout
+rm -rf ~/ceremonyeth
+```
+
+---
 
 🖥 Screen Commands
 
@@ -86,13 +175,24 @@ chmod +x ethstorage-setup.sh
 
 ---
 
-### 🧹 After Contribution - Logout process
+## 🛠 Troubleshooting
 
+**npm update error (`EBADENGINE`)**
+You’re on Node 18 — stick to `npm@10`:
+
+```bash
+npm install -g npm@10
 ```
-phase2cli clean
-phase2cli logout
-rm -rf ~/ceremonyeth
+
+**Lost connection?**
+Just re-run:
+
+```bash
+phase2cli contribute -c ethstorage-v1-trusted-setup-ceremony
 ```
+
+It will resume from where you left off.
+
 
 ---
 
