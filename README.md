@@ -169,8 +169,8 @@ rm -rf ~/ceremonyeth
 | Action         | Command                       |
 | -------------- | ------------------------------|
 | Detach         | `Ctrl + A + D`                |
-| Resume         | `screen -r ceremonyeth`       |
-| Delete screen  | `screen -XS ceremonyeth quit` |
+| Resume         | `screen -r ceremony`          |
+| Delete screen  | `screen -XS ceremony quit`    |
 | List sessions  | `screen -ls`                  |
 
 ---
