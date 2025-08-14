@@ -68,6 +68,12 @@ chmod +x ethstorage-setup.sh
 
 ---
 
+### Github Authentication 
+
+- Visit https://github.com/login/device, enter the code, and authorize ethstorage.
+
+---
+
 
 🖥 Screen Commands
 
